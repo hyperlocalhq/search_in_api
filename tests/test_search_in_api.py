@@ -12,19 +12,28 @@ from search_in_api import cli
 
 
 @pytest.fixture
-def response():
-    """Sample pytest fixture.
-
+def params():
+    """
     See more at: http://doc.pytest.org/en/latest/fixture.html
     """
-    # import requests
-    # return requests.get('https://github.com/audreyr/cookiecutter-pypackage')
+    return {
+        "url": "https://raw.githubusercontent.com/archatas/search_in_api/master/tests/data/sample-data.xml",
+        "tag": "artist",
+        "value": "Joachim Pastor",
+    }
 
 
-def test_content(response):
-    """Sample pytest test function with the pytest fixture as an argument."""
-    # from bs4 import BeautifulSoup
-    # assert 'GitHub' in BeautifulSoup(response.content).title.string
+def test_search_in_string(params):
+    """Test the core function"""
+    pages = search_in_api.search_for_string(
+        url=params['url'],
+        tag=params['tag'],
+        value=params['value'],
+    )
+    assert pages == [
+        "https://raw.githubusercontent.com/archatas/search_in_api/master/tests/data/sample-data.xml",
+        "https://raw.githubusercontent.com/archatas/search_in_api/master/tests/data/sample-data3.xml",
+    ]
 
 
 def test_command_line_interface():

@@ -6,15 +6,28 @@ from __future__ import unicode_literals
 
 import argparse
 import threading
-import Queue
-
 import requests
-import xml.etree.ElementTree as ET
-from Tkinter import *
+from xml.etree import ElementTree
+
+try:
+    import queue  # Python 3
+except ImportError:
+    import Queue as queue  # Python 2
+
+try:
+    from tkinter import *  # Python 3
+except ImportError:
+    from Tkinter import *  # Python 2
+
 try:
     import readline
 except ImportError:
-    pass #readline not available
+    readline = None  # readline not available
+
+try:
+    from urllib.parse import urlparse  # Python 3
+except ImportError:
+    from urlparse import urlparse  # Python 2
 
 
 def get_domain(url):
@@ -23,7 +36,6 @@ def get_domain(url):
     :param url: any URL
     :return: protocol and domain name of that URL
     """
-    from urlparse import urlparse
     parsed_uri = urlparse(url)
     domain = '{uri.scheme}://{uri.netloc}'.format(uri=parsed_uri)
     return domain
@@ -42,27 +54,27 @@ def search_for_string(url, tag, value, results_queue=None):
     results = []
     domain = get_domain(url)
 
-    def search_in_page(url, tag, value):
+    def search_in_page(page_url, tag_to_search, value_to_search):
         headers = {
             'User-Agent': 'Mozilla/5.0',
         }
-        response = requests.get(url, headers=headers, allow_redirects=True)
+        response = requests.get(page_url, headers=headers, allow_redirects=True)
         if response.status_code != requests.codes.OK:
-            print("Server Error when reading {}".format(url))
+            print("Server Error when reading {}".format(page_url))
             return
 
-        root = ET.fromstring(response.content)
+        root = ElementTree.fromstring(response.content)
 
-        for node in root.findall('.//{}'.format(tag)):
-            if node.text and value.lower() in node.text.lower():
-                results.append(url)
+        for node in root.findall('.//{}'.format(tag_to_search)):
+            if node.text and value_to_search.lower() in node.text.lower():
+                results.append(page_url)
                 break
 
-        url = root.findtext('./meta/next')
-        if url:
-            if url.startswith("/"):
-                url = domain + url
-            search_in_page(url=url, tag=tag, value=value)
+        page_url = root.findtext('./meta/next')
+        if page_url:
+            if page_url.startswith("/"):
+                page_url = domain + page_url
+            search_in_page(page_url=page_url, tag_to_search=tag_to_search, value_to_search=value_to_search)
 
     search_in_page(url, tag, value)
 
@@ -77,6 +89,8 @@ class App:
     GUI App for the search input and output
     """
     def __init__(self, master):
+        self.results_queue = None
+        self.background_thread = None
         self.master = master
         self.results = []
         master.title("Search in XML API")
@@ -151,7 +165,7 @@ class App:
     def search(self):
         if self.is_valid():
             self.status.set("Searching...")
-            self.results_queue = Queue.Queue()
+            self.results_queue = queue.Queue()
             self.background_thread = threading.Thread(
                 target=search_for_string,
                 kwargs=dict(
@@ -167,7 +181,7 @@ class App:
     def process_queue(self):
         try:
             self.results = self.results_queue.get(0)
-        except Queue.Empty:
+        except queue.Empty:
             self.master.after(100, self.process_queue)
         else:
             if self.results:
@@ -186,26 +200,27 @@ def get_parser():
     Gets argument parser of the command-line version
     :return: argument parser
     """
-    parser = argparse.ArgumentParser(description=('Search for a tag and value in multiple API pages'))
-    parser.add_argument('--command-line', help='Shows command line dialog', dest="command_line", action='store_true')
-    parser.add_argument('--url', help='API URL for the first page')
-    parser.add_argument('--tag', help=("tag to search for"))
-    parser.add_argument('--value', help=("value to search for"), default="")
-    return parser
+    _parser = argparse.ArgumentParser(description='Search for a tag and value in multiple API pages')
+    _parser.add_argument('--command-line', help='Shows command line dialog',
+                         dest='command_line', action='store_true')
+    _parser.add_argument('--url', help='API URL for the first page')
+    _parser.add_argument('--tag', help='tag to search for')
+    _parser.add_argument('--value', help='value to search for', default='')
+    return _parser
 
 
-def command_line(args):
+def command_line(arguments):
     """
     Command line execution
     """
-    if args.command_line:
+    if arguments.command_line:
         url = raw_input("Enter API URL for the first page: ").decode("utf-8").strip()
         tag = raw_input("Enter tag to search for: ").decode("utf-8").strip()
         value = raw_input("Enter value to search for: ").decode("utf-8").strip()
     else:
-        url = args.url
-        tag = args.tag
-        value = args.value
+        url = arguments.url
+        tag = arguments.tag
+        value = arguments.value
 
     print("Searching...")
 
@@ -223,7 +238,7 @@ def gui():
     GUI execution
     """
     root = Tk()
-    app = App(root)
+    App(root)
     root.mainloop()
     exit()
 
