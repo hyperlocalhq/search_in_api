@@ -9,6 +9,10 @@ Search in API
 .. image:: https://img.shields.io/travis/archatas/search_in_api.svg
         :target: https://travis-ci.org/archatas/search_in_api
 
+.. image:: https://pyup.io/repos/github/archatas/search_in_api/shield.svg
+     :target: https://pyup.io/repos/github/archatas/search_in_api/
+     :alt: Updates
+
 .. image:: https://readthedocs.org/projects/search-in-api/badge/?version=latest
         :target: https://search-in-api.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
