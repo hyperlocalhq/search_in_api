@@ -217,20 +217,25 @@ def command_line(arguments):
         url = raw_input("Enter API URL for the first page: ").decode("utf-8").strip()
         tag = raw_input("Enter tag to search for: ").decode("utf-8").strip()
         value = raw_input("Enter value to search for: ").decode("utf-8").strip()
+
+        print("Searching...")
+
+        results = search_for_string(url=url, tag=tag, value=value)
+        if results:
+            print("API pages with the search result:\n" + "\n".join(results))
+        else:
+            print("Nothing was found.")
+
+        print("Finished.")
+
     else:
         url = arguments.url
         tag = arguments.tag
         value = arguments.value
 
-    print("Searching...")
-
-    results = search_for_string(url=url, tag=tag, value=value)
-    if results:
-        print("API pages with the search result:\n" + "\n".join(results))
-    else:
-        print("Nothing was found.")
-
-    print("Finished.")
+        results = search_for_string(url=url, tag=tag, value=value)
+        if results:
+            print("\n".join(results))
 
 
 def gui():
@@ -243,7 +248,7 @@ def gui():
     exit()
 
 
-if __name__ == "__main__":
+def main():
     parser = get_parser()       # Start the command-line argument parsing
     args = parser.parse_args()  # Read the command-line arguments
 
@@ -254,3 +259,7 @@ if __name__ == "__main__":
             gui()                   # otherwise run the GUI version
     except KeyboardInterrupt:
         print("\nProgram canceled.")
+
+
+if __name__ == "__main__":
+    main()

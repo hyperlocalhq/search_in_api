@@ -12,7 +12,6 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = [
-    'Click>=6.0', 
     'altgraph==0.15',
     'asn1crypto==0.24.0',
     'certifi==2018.1.18',
@@ -56,7 +55,7 @@ setup(
     description="Search in API is a script that allows you to search among multiple pages of an API endpoint.",
     entry_points={
         'console_scripts': [
-            'search_in_api=search_in_api.cli:main',
+            'search_in_api=search_in_api.search_in_api:main',
         ],
     },
     install_requires=requirements,
