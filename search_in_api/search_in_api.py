@@ -1,4 +1,7 @@
 # -*- coding: UTF-8 -*-
+
+""" Main Module """
+
 from __future__ import unicode_literals
 
 import argparse
@@ -15,6 +18,11 @@ except ImportError:
 
 
 def get_domain(url):
+    """
+    From a given URL returns just the protocol and domain
+    :param url: any URL
+    :return: protocol and domain name of that URL
+    """
     from urlparse import urlparse
     parsed_uri = urlparse(url)
     domain = '{uri.scheme}://{uri.netloc}'.format(uri=parsed_uri)
@@ -22,6 +30,15 @@ def get_domain(url):
 
 
 def search_for_string(url, tag, value, results_queue=None):
+    """
+    Searches in multiple pages of an API for a specific tag and value.
+
+    :param url: URL of an XML API endpoint
+    :param tag: XML tag to search for
+    :param value: String to search in the value of the XML tag
+    :param results_queue: Queue where to put the results in case of asyncronious execution
+    :return: if results_queue is not given, a list of page URLs with the search results
+    """
     results = []
     domain = get_domain(url)
 
@@ -56,6 +73,9 @@ def search_for_string(url, tag, value, results_queue=None):
 
 
 class App:
+    """
+    GUI App for the search input and output
+    """
     def __init__(self, master):
         self.master = master
         self.results = []
@@ -162,7 +182,10 @@ class App:
 
 
 def get_parser():
-    """ The argument parser of the command-line version """
+    """
+    Gets argument parser of the command-line version
+    :return: argument parser
+    """
     parser = argparse.ArgumentParser(description=('Search for a tag and value in multiple API pages'))
     parser.add_argument('--command-line', help='Shows command line dialog', dest="command_line", action='store_true')
     parser.add_argument('--url', help='API URL for the first page')
@@ -172,6 +195,9 @@ def get_parser():
 
 
 def command_line(args):
+    """
+    Command line execution
+    """
     if args.command_line:
         url = raw_input("Enter API URL for the first page: ").decode("utf-8").strip()
         tag = raw_input("Enter tag to search for: ").decode("utf-8").strip()
@@ -193,6 +219,9 @@ def command_line(args):
 
 
 def gui():
+    """
+    GUI execution
+    """
     root = Tk()
     app = App(root)
     root.mainloop()
