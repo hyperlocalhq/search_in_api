@@ -30,7 +30,7 @@ and value among multiple pages of an XML API endpoint.
 Use Case Example
 --------
 
-Let's say, you have a XML API that provides a playlist of songs. It's a looooong paginated list and there is no search
+Let's say, you have an XML API that provides a playlist of songs. It's a looooong paginated list and there is no search
 implemented. You have an urge to find that particular song with a title having a word "Journey" and to check who
 is playing it. If the songs are listed chronologically by the date added, you would need to search from page to page
 until you finally get it. This tool does exactly that for you. There you can enter the URL of the first page of XML API,
