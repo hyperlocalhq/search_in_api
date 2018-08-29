@@ -111,7 +111,7 @@ Tips
 
 To run a subset of tests::
 
-$ py.test tests.test_search_in_api
+$ py.test tests/test_search_in_api.py
 
 
 Deploying

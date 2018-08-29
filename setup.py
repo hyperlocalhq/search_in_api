@@ -17,7 +17,7 @@ requirements = [
     'certifi==2018.1.18',
     'cffi==1.11.4',
     'chardet==3.0.4',
-    'cryptography==2.1.4',
+    'cryptography==2.3.1',
     'dis3==0.1.2',
     'enum34==1.1.6',
     'future==0.16.0',
