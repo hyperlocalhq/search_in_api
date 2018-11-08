@@ -28,7 +28,7 @@ requirements = [
     'pycparser==2.18',
     'PyInstaller==3.3.1',
     'pyOpenSSL==17.5.0',
-    'requests==2.18.4',
+    'requests>=2.20.0',
     'six==1.11.0',
     'urllib3==1.22',
 ]
