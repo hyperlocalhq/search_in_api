@@ -44,16 +44,15 @@ def get_domain(url):
 
 
 def is_in_structure(key_to_search, value_to_search, structure):
+    """Recursive function checking structures made of nested dictionaries and lists if they contain specific key having a specific value"""
     if isinstance(structure, dict):
         if key_to_search in structure:
             value = structure.get(key_to_search)
-            if isinstance(value, string_types) and value_to_search.lower() in value.lower():
-                return True
-        elif any((is_in_structure(key_to_search, value_to_search, value) for value in structure.values())):
-            return True
+            return isinstance(value, string_types) and value_to_search.lower() in value.lower()
+        else:
+            return any((is_in_structure(key_to_search, value_to_search, value) for value in structure.values()))
     elif isinstance(structure, list):
-        if any((is_in_structure(key_to_search, value_to_search, el) for el in structure)):
-            return True
+        return any((is_in_structure(key_to_search, value_to_search, el) for el in structure))
     return False
 
 
