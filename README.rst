@@ -28,7 +28,7 @@ and value among multiple pages of an XML API endpoint.
 
 
 Use Case Example
---------
+----------------
 
 Let's say, you have an XML API that provides a playlist of songs. It's a looooong paginated list and there is no search
 implemented. You have an urge to find that particular song with a title having a word "Journey" and to check who
