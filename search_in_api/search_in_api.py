@@ -7,7 +7,9 @@ from __future__ import unicode_literals
 import argparse
 import threading
 import requests
+from json.decoder import JSONDecodeError
 from xml.etree import ElementTree
+from six import string_types
 
 try:
     import queue  # Python 3
@@ -41,13 +43,27 @@ def get_domain(url):
     return domain
 
 
+def is_in_structure(key_to_search, value_to_search, structure):
+    if isinstance(structure, dict):
+        if key_to_search in structure:
+            value = structure.get(key_to_search)
+            if isinstance(value, string_types) and value_to_search.lower() in value.lower():
+                return True
+        elif any((is_in_structure(key_to_search, value_to_search, value) for value in structure.values())):
+            return True
+    elif isinstance(structure, list):
+        if any((is_in_structure(key_to_search, value_to_search, el) for el in structure)):
+            return True
+    return False
+
+
 def search_for_string(url, tag, value, results_queue=None):
     """
     Searches in multiple pages of an API for a specific tag and value.
 
     :param url: URL of an XML API endpoint
-    :param tag: XML tag to search for
-    :param value: String to search in the value of the XML tag
+    :param tag: XML tag or JSON key to search for
+    :param value: String to search in the value of the XML tag or JSON key
     :param results_queue: Queue where to put the results in case of asyncronious execution
     :return: if results_queue is not given, a list of page URLs with the search results
     """
@@ -63,14 +79,25 @@ def search_for_string(url, tag, value, results_queue=None):
             print("Server Error when reading {}".format(page_url))
             return
 
-        root = ElementTree.fromstring(response.content)
+        try:
+            root_dict = response.json()
+        except JSONDecodeError:
+            # XML case
+            root = ElementTree.fromstring(response.content)
 
-        for node in root.findall('.//{}'.format(tag_to_search)):
-            if node.text and value_to_search.lower() in node.text.lower():
+            for node in root.findall('.//{}'.format(tag_to_search)):
+                if node.text and value_to_search.lower() in node.text.lower():
+                    results.append(page_url)
+                    break
+
+            page_url = root.findtext('./meta/next')
+        else:
+            # JSON case
+            if is_in_structure(tag_to_search, value_to_search, root_dict):
                 results.append(page_url)
-                break
 
-        page_url = root.findtext('./meta/next')
+            page_url = root_dict['meta']['next']
+
         if page_url:
             if page_url.startswith("/"):
                 page_url = domain + page_url
