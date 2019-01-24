@@ -2,9 +2,15 @@
 Usage
 =====
 
+Graphical User Interface
+------------------------
+
 To run **Search in API** with graphical user interface::
 
     $ search_in_api
+
+Command Line
+------------
 
 To run **Search in API** in a command line with dialog inputs::
 
@@ -18,12 +24,18 @@ To run **Search in API** in a command line with dialog inputs::
     https://example.com/api/songs.xml?page=12
     Finished.
 
+Bash Script
+------------
+
 To run **Search in API** in a bash script::
 
     $ search_in_api --url="https://example.com/api/songs.xml" \
     --tag="title" --value="Journey"
     https://example.com/api/songs.xml?page=7
     https://example.com/api/songs.xml?page=12
+
+Python Code
+------------
 
 To use **Search in API** in a Python project::
 

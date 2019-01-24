@@ -119,7 +119,7 @@ class App:
         self.background_thread = None
         self.master = master
         self.results = []
-        master.title("Search in XML API")
+        master.title("Search in XML or JSON API")
 
         main_frame = Frame(master, padx=10, pady=10)
         main_frame.pack()
@@ -133,7 +133,7 @@ class App:
 
         frame2 = Frame(main_frame, padx=5, pady=5)
         frame2.pack()
-        label_tag = Label(frame2, text="Tag to search for:", width=20, anchor="w")
+        label_tag = Label(frame2, text="Tag/key to search for:", width=20, anchor="w")
         label_tag.pack(side=LEFT)
         self.entry_tag = Entry(frame2, width=40)
         self.entry_tag.pack(side=RIGHT)
@@ -155,7 +155,7 @@ class App:
         self.status = StringVar()
         self.message_status = Message(frame5, textvariable=self.status, width=2000)
         self.message_status.pack()
-        self.button_open_results = Button(frame5, text="Open results in the browser", command=self.open_results)
+        self.button_open_results = Button(frame5, text="Open results in the default browser", command=self.open_results)
         self.button_open_results.pack()
 
     def is_valid(self):
@@ -241,7 +241,7 @@ def command_line(arguments):
     """
     if arguments.command_line:
         url = raw_input("Enter API URL for the first page: ").decode("utf-8").strip()
-        tag = raw_input("Enter tag to search for: ").decode("utf-8").strip()
+        tag = raw_input("Enter tag/key to search for: ").decode("utf-8").strip()
         value = raw_input("Enter value to search for: ").decode("utf-8").strip()
 
         print("Searching...")
