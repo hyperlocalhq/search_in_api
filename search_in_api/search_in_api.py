@@ -7,7 +7,6 @@ from __future__ import unicode_literals
 import argparse
 import threading
 import requests
-from json.decoder import JSONDecodeError
 from xml.etree import ElementTree
 from six import string_types
 
@@ -80,7 +79,7 @@ def search_for_string(url, tag, value, results_queue=None):
 
         try:
             root_dict = response.json()
-        except JSONDecodeError:
+        except ValueError:
             # XML case
             root = ElementTree.fromstring(response.content)
 
