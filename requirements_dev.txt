@@ -6,7 +6,7 @@ Babel==2.6.0
 bumpversion==0.5.3
 certifi==2019.3.9
 chardet==3.0.4
-coverage==4.5.3
+coverage==5.0
 docutils==0.14
 filelock==3.0.10
 flake8==3.7.7
