@@ -8,27 +8,15 @@ import argparse
 import threading
 import requests
 from xml.etree import ElementTree
-from six import string_types
-
-try:
-    import queue  # Python 3
-except ImportError:
-    import Queue as queue  # Python 2
-
-try:
-    from tkinter import *  # Python 3
-except ImportError:
-    from Tkinter import *  # Python 2
+import queue
+from tkinter import *
 
 try:
     import readline
 except ImportError:
     readline = None  # readline not available
 
-try:
-    from urllib.parse import urlparse  # Python 3
-except ImportError:
-    from urlparse import urlparse  # Python 2
+from urllib.parse import urlparse
 
 
 def get_domain(url):
@@ -47,7 +35,7 @@ def is_in_structure(key_to_search, value_to_search, structure):
     if isinstance(structure, dict):
         if key_to_search in structure:
             value = structure.get(key_to_search)
-            return isinstance(value, string_types) and value_to_search.lower() in value.lower()
+            return isinstance(value, str) and value_to_search.lower() in value.lower()
         else:
             return any((is_in_structure(key_to_search, value_to_search, value) for value in structure.values()))
     elif isinstance(structure, list):
