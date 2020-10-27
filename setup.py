@@ -17,7 +17,7 @@ requirements = [
     'certifi==2019.11.28',
     'cffi==1.13.2',
     'chardet==3.0.4',
-    'cryptography==2.8',
+    'cryptography==3.2',
     'dis3==0.1.3',
     'future==0.18.2',
     'idna==2.8',
