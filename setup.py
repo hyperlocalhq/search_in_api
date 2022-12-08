@@ -14,7 +14,7 @@ with open('HISTORY.rst') as history_file:
 requirements = [
     'altgraph==0.17',
     'asn1crypto==1.3.0',
-    'certifi==2019.11.28',
+    'certifi==2022.12.7',
     'cffi==1.13.2',
     'chardet==3.0.4',
     'cryptography==2.8',
